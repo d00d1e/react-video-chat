@@ -18,20 +18,20 @@ app.get("/", (req, res) => {
 io.on("connection", (socket) => {
   socket.emit("self", socket.id);
 
+  socket.on("callUser", ({ userToCall, signalData, from, name }) => {
+    io.to(userToCall).emit("callUser", { signal: signalData, from, name });
+  });
+
+  socket.on("answerCall", (data) => {
+    io.to(data.to).emit("callAccepted", data.signal);
+  });
+
   socket.on("disconnect", () => {
-    socket.broadcast.emit("callended");
-  });
-
-  socket.on("calluser", ({ userToCall, signalData, from, name }) => {
-    io.to(userToCall).emit("calluser", { signal: signalData, from, name });
-  });
-
-  socket.on("answercall", (data) => {
-    io.to(data.to).emit("callaccepted", data.signal);
+    socket.broadcast.emit("callEnded");
   });
 });
 
 const PORT = process.env.PORT || 5000;
 server.listen(PORT, () => {
-  console.log(`Server starte at http://localhost:${PORT}`);
+  console.log(`Server started at http://localhost:${PORT}`);
 });

@@ -18,7 +18,7 @@ const useStyles = makeStyles((theme) => ({
   video: {
     width: "550px",
     [theme.breakpoints.down("xs")]: {
-      width: "300px",
+      width: "320px",
     },
   },
 }));
@@ -35,14 +35,14 @@ export default function VideoPlayer() {
         <Paper className={classes.paper}>
           <Grid item xs={12} md={6}>
             <Typography variant="h5" gutterBottom>
-              {name || "Name"}
+              {name || "User1"}
             </Typography>
             <video
+              className={classes.video}
+              ref={selfVideo}
               playsInline
               autoPlay
               muted
-              ref={selfVideo}
-              className={classes.video}
             />
           </Grid>
         </Paper>
@@ -53,14 +53,14 @@ export default function VideoPlayer() {
         <Paper className={classes.paper}>
           <Grid item xs={12} md={6}>
             <Typography variant="h5" gutterBottom>
-              {call.name || "Name"}
+              {call.name || "User2"}
             </Typography>
             <video
+              className={classes.video}
+              ref={userVideo}
               playsInline
               autoPlay
               muted
-              ref={userVideo}
-              className={classes.video}
             />
           </Grid>
         </Paper>

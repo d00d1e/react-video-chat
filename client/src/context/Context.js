@@ -16,7 +16,7 @@ export const SocketState = () => {
 };
 
 export const ContextProvider = ({ children }) => {
-  const [stream, setStream] = useState(null);
+  const [stream, setStream] = useState();
   const [self, setSelf] = useState("");
   const [call, setCall] = useState({});
   const [callAccepted, setCallAccepted] = useState(false);
@@ -36,30 +36,12 @@ export const ContextProvider = ({ children }) => {
         selfVideo.current.srcObject = currentStream;
       });
 
-    socket.on("me", (id) => setSelf(id));
+    socket.on("self", (id) => setSelf(id));
 
     socket.on("callUser", ({ from, name: callerName, signal }) => {
       setCall({ isReceivingCall: true, from, name: callerName, signal });
     });
   }, []);
-
-  const answerCall = () => {
-    setCallAccepted(true);
-
-    const peer = new Peer({ initiator: false, trickle: false, stream });
-
-    peer.on("signal", (data) => {
-      socket.emit("answerCall", { signal: data, to: call.from });
-    });
-
-    peer.on("stream", (currentStream) => {
-      userVideo.current.srcObject = currentStream;
-    });
-
-    peer.signal(call.signal);
-
-    connectionRef.current = peer;
-  };
 
   const callUser = (id) => {
     const peer = new Peer({ initiator: true, trickle: false, stream });
@@ -86,6 +68,24 @@ export const ContextProvider = ({ children }) => {
     connectionRef.current = peer;
   };
 
+  const answerCall = () => {
+    setCallAccepted(true);
+
+    const peer = new Peer({ initiator: false, trickle: false, stream });
+
+    peer.on("signal", (data) => {
+      socket.emit("answerCall", { signal: data, to: call.from });
+    });
+
+    peer.on("stream", (currentStream) => {
+      userVideo.current.srcObject = currentStream;
+    });
+
+    peer.signal(call.signal);
+
+    connectionRef.current = peer;
+  };
+
   const leaveCall = () => {
     setCallEnded(true);
 
@@ -97,14 +97,14 @@ export const ContextProvider = ({ children }) => {
   return (
     <SocketContext.Provider
       value={{
-        call,
-        callAccepted,
+        self,
+        name,
+        stream,
         selfVideo,
         userVideo,
-        stream,
-        name,
+        call,
+        callAccepted,
         callEnded,
-        self,
         setName,
         callUser,
         leaveCall,

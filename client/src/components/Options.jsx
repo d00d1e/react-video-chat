@@ -45,7 +45,7 @@ const useStyles = makeStyles((theme) => ({
 
 export default function Options({ children }) {
   const [idToCall, setIdToCall] = useState("");
-  const { self, callAccepted, name, setName, leaveCall, callUser, callEnded } =
+  const { self, name, setName, leaveCall, callUser, callAccepted, callEnded } =
     SocketState();
   const classes = useStyles();
 
@@ -55,7 +55,7 @@ export default function Options({ children }) {
         <form className={classes.form} noValidate autoComplete="off">
           <Grid container className={classes.gridContainer}>
             <Grid item xs={12} md={6} className={classes.padding}>
-              <Typography variant="h6" gutterBottom>
+              <Typography gutterBottom variant="h6">
                 Account Info
               </Typography>
               <TextField
@@ -77,8 +77,8 @@ export default function Options({ children }) {
             </Grid>
 
             <Grid item xs={12} md={6} className={classes.padding}>
-              <Typography variant="h6" gutterBottom>
-                Make a Call
+              <Typography gutterBottom variant="h6">
+                Make a call
               </Typography>
               <TextField
                 label="ID to call"
@@ -90,8 +90,8 @@ export default function Options({ children }) {
                 <Button
                   variant="contained"
                   color="secondary"
-                  className={classes.margin}
                   startIcon={<PhoneDisabled fontSize="large" />}
+                  className={classes.margin}
                   onClick={leaveCall}
                   fullWidth
                 >
@@ -101,9 +101,9 @@ export default function Options({ children }) {
                 <Button
                   variant="contained"
                   color="primary"
-                  className={classes.margin}
                   startIcon={<Phone fontSize="large" />}
                   onClick={() => callUser(idToCall)}
+                  className={classes.margin}
                   fullWidth
                 >
                   Call
